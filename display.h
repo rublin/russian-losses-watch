@@ -8,10 +8,8 @@
 #include "wifi.h"
 #include "bitmaps.h"
 
-// #include <Fonts/FreeSansBold12pt7b.h>
 #include <Fonts/FreeMonoBold12pt7b.h>
-// #include <Fonts/FreeMono9pt7b.h>
-
+// #include "Fonts/FreeSerif5pt7b.h"
 
 // ST7735 TFT module connections
 #define TFT_RST D4 
@@ -30,5 +28,6 @@ void printText(char* text, uint16_t color);
 String dBmtoPercentage(int dBm);
 void drawCentreString(const String& text, int y, int size = 2);
 void drawTime(String time);
+String getIncreaseLine();
 
 #endif

@@ -7,37 +7,32 @@ const int RSSI_MAX = -50;
 const int RSSI_MIN = -100;
 
 void showTime() {
-  // Serial.printf("TimeZone:      %s\n", DateTime.getTimeZone());
-  // Serial.printf("Up     Time:   %lu seconds\n", millis() / 1000);
-  // Serial.printf("Local  Time:   %s\n",
-  // DateTime.format(DateFormatter::SIMPLE).c_str());
-
-  char dow_matrix[7][10] = { "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY" };
-
   DateTimeParts p = DateTime.getParts();
   tft.fillScreen(ST77XX_BLACK);
 
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
-  drawCentreString(dow_matrix[p.getWeekDay()], 5);
+  drawCentreString(DateTime.format("%d %b  %a"), 5);
 
-  u8g2_for_adafruit_gfx.setFont(u8g2_font_inb16_mn);
-  u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_GREEN);
-  u8g2_for_adafruit_gfx.setCursor(10, 90);
-  u8g2_for_adafruit_gfx.print(DateTime.format(DateFormatter::DATE_ONLY));
+  // tft.setTextColor(ST77XX_GREEN, ST7735_BLACK);
+  // drawCentreString(DateTime.format("%d %b  %a"), 76);
 
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
   tft.setCursor(10, 95);
   tft.setTextSize(2);
   tft.print("War day: " + String((int)currentResponse["data"]["day"]));
 
+  // tft.setFont(&FreeSerif5pt7b);
+  // tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
+  // tft.setCursor(5, 125);
+  // tft.setTextSize(1);
+
+  // tft.print("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + WiFi.localIP().toString());
+  // tft.setFont();
+
   u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
   u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
-
   u8g2_for_adafruit_gfx.setCursor(5, 125);
-  u8g2_for_adafruit_gfx.print("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()));
-
-  u8g2_for_adafruit_gfx.setCursor(85, 125);
-  u8g2_for_adafruit_gfx.print(WiFi.localIP());
+  u8g2_for_adafruit_gfx.print("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + WiFi.localIP().toString());
 
   tft.fillRect(10, 25, 28, 45, 0xC618);
   tft.fillRect(42, 25, 28, 45, 0xC618);
@@ -45,7 +40,7 @@ void showTime() {
   tft.fillRect(125, 25, 28, 45, 0xC618);
 
   String time = DateTime.format(DateFormatter::TIME_ONLY).substring(0, 5);
-  for (int i = 0; i <= 10; i++) {
+  for (int i = 0; i < 10; i++) {
     drawTime(time);
   }
 }
@@ -132,6 +127,10 @@ void displayLosses1() {
   delay(5000);
 }
 
+String getIncreaseLine() {
+  return "За минулу добу знищено ос.складу 579, танків 23, арт.систем 14, РСЗВ 2, БпЛА 4";
+}
+
 void displayLosses2() {
   tft.fillScreen(ST77XX_BLACK);
   u8g2_for_adafruit_gfx.setFont(u8g2_font_6x13_t_cyrillic);
@@ -140,6 +139,12 @@ void displayLosses2() {
   tft.fillRect(0, 65, 160, 12, 0x10A2);
   tft.fillRect(0, 95, 160, 12, 0x10A2);
 
+  // tft.setFont();
+  // tft.setFont(&FreeSans20pt7b);
+  // tft.setTextColor(0x2015);
+  // tft.setCursor(0, 15);
+  // tft.print("Авто.техніка:       " + getValue("vehicles_fuel_tanks"));
+  // tft.setFont();
   u8g2_for_adafruit_gfx.setCursor(0, 15);
   u8g2_for_adafruit_gfx.print("Авто.техніка:       " + getValue("vehicles_fuel_tanks"));
   u8g2_for_adafruit_gfx.setCursor(0, 30);
