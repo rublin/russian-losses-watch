@@ -23,12 +23,12 @@ String getValue(String param) {
   return String((int)currentResponse["data"]["stats"][param]);
 }
 
-String getIncrease(String param) {
+int getIncrease(String param) {
   int increase = (int)currentResponse["data"]["increase"][param];
   if (increase > 0) {
-    return String("+") + increase;
+    return increase;
   }
-  return " ";
+  return 0;
 }
 
 void getEnemyLosses() {

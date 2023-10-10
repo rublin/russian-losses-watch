@@ -16,7 +16,7 @@ extern WiFiManager wm;
 
 String getValueWithIncrease(String param);
 String getValue(String param);
-String getIncrease(String param);
+int getIncrease(String param);
 void getEnemyLosses();
 void reconnect();
 
