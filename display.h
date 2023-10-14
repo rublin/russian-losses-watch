@@ -29,5 +29,7 @@ String dBmtoPercentage(int dBm);
 void drawCentreString(const String& text, int y, int size = 2);
 void drawTime(String time, bool hide);
 String getIncreaseLine();
+void displayWiFiConnected();
+void displayWiFiConfiguration();
 
 #endif

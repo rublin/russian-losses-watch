@@ -55,6 +55,33 @@ void showTime() {
   }
 }
 
+void displayWiFiConnected() {
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setTextSize(2);
+  tft.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
+
+  tft.setCursor(0, 10);
+  tft.print("WiFi status:");
+  tft.setCursor(0, 70);
+  tft.print("WiFi network:");
+  
+  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+  drawCentreString("Connected!", 40);
+  drawCentreString(WiFi.SSID(), 100);
+
+  delay(5000);
+}
+
+void displayWiFiConfiguration() {
+  tft.fillScreen(ST77XX_BLACK);
+  // tft.setTextSize(1);
+  tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
+  drawCentreString("WiFi NOT connected", 30, 1);
+  drawCentreString("Connect to GloryToUkraine", 80, 1);
+  // tft.setTextSize(2);
+  delay(5000);
+}
+
 void displayIco1() {
 
   tft.fillScreen(ST77XX_WHITE);
@@ -98,7 +125,7 @@ void displayLosses1() {
   u8g2_for_adafruit_gfx.setCursor(0, 30);
   u8g2_for_adafruit_gfx.print("Танки:     " + getValue("tanks"));
   u8g2_for_adafruit_gfx.setCursor(0, 45);
-  u8g2_for_adafruit_gfx.print("БМП+:      " + getValue("armoured_fighting_vehicles"));
+  u8g2_for_adafruit_gfx.print("ББМ:       " + getValue("armoured_fighting_vehicles"));
   u8g2_for_adafruit_gfx.setCursor(0, 60);
   u8g2_for_adafruit_gfx.print("Арт.сист:  " + getValue("artillery_systems"));
   u8g2_for_adafruit_gfx.setCursor(0, 75);

@@ -17,7 +17,8 @@ void setup() {
 
   if (!res) {
     Serial.println("Failed to connect");
-    for (int i = 0; i <=10; i++){
+    displayWiFiConfiguration();
+    for (int i = 0; i <= 10; i++) {
       delay(60000);
       if (WiFi.reconnect()) {
         break;
@@ -27,6 +28,7 @@ void setup() {
   } else {
     //if you get here you have connected to the WiFi
     Serial.println("connected...yeey :)");
+    displayWiFiConnected();
   }
 
   setupDateTime();
@@ -43,8 +45,8 @@ void loop() {
     getEnemyLosses();
   }
 
+  showTime();
   displayLosses1();
   showTime();
   displayLosses2();
-  showTime();
 }

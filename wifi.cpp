@@ -55,14 +55,12 @@ void getEnemyLosses() {
 
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-          Serial.println(F("SSSSSSSSSSSSSSSSS"));
           String payload = https.getString();
           Serial.println(payload);
           currentResponse = JSON.parse(payload);
           // Serial.println(currentResponse);
           Serial.println(currentResponse["message"]);
           Serial.println(currentResponse["data"]["date"]);
-          // Serial.println(currentResponse["data"]["stats"]["tanks"]);
           lastUpdated = DateTime.now();
         }
       } else {
@@ -87,38 +85,3 @@ void reconnect() {
     ESP.restart();
   }
 }
-
-/*void getEnemyLosses() {
-  HTTPClient https;
-
-  Serial.print("[HTTPS] begin...\n");
-  if (https.begin(client, host, 443, url)) {
-    Serial.print("[HTTPS] GET...\n");
-    int httpCode = https.GET();
-
-    if (httpCode > 0) {
-      // HTTP header has been send and Server response header has been handled
-      Serial.printf("[HTTPS] GET... code: %d\n", httpCode);
-
-      // file found at server
-      if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-        // https.getStream();
-        Serial.println(F("SSSSSSSSSSSSSSSSS"));
-        String payload = https.getString();
-        Serial.println(payload);
-        currentResponse = JSON.parse(payload);
-        // Serial.println(currentResponse);
-        Serial.println(currentResponse["message"]);
-        Serial.println(currentResponse["data"]["date"]);
-        // Serial.println(currentResponse["data"]["stats"]["tanks"]);
-        lastUpdated = DateTime.now();
-      }
-    } else {
-      Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
-    }
-
-    https.end();
-  } else {
-    Serial.printf("[HTTPS] Unable to connect\n");
-  }
-}*/
