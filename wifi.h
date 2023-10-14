@@ -13,11 +13,12 @@ extern JSONVar currentResponse;
 extern time_t lastUpdated;
 extern WiFiClientSecure client;
 extern WiFiManager wm;
+extern const long CONFIG_PORTAL_TIMEOUT;
 
 String getValueWithIncrease(String param);
 String getValue(String param);
 int getIncrease(String param);
 void getEnemyLosses();
-void reconnect();
+void configPortalTimeoutCallback();
 
 #endif

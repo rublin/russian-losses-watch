@@ -64,7 +64,7 @@ void displayWiFiConnected() {
   tft.print("WiFi status:");
   tft.setCursor(0, 70);
   tft.print("WiFi network:");
-  
+
   tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
   drawCentreString("Connected!", 40);
   drawCentreString(WiFi.SSID(), 100);
@@ -74,11 +74,22 @@ void displayWiFiConnected() {
 
 void displayWiFiConfiguration() {
   tft.fillScreen(ST77XX_BLACK);
-  // tft.setTextSize(1);
-  tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
-  drawCentreString("WiFi NOT connected", 30, 1);
-  drawCentreString("Connect to GloryToUkraine", 80, 1);
-  // tft.setTextSize(2);
+  tft.setTextSize(2);
+  tft.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
+  tft.setCursor(0, 10);
+  tft.print("WiFi status:");
+  tft.setTextColor(0x2015);
+  drawCentreString("NOT connected", 35);
+
+  u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
+  u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
+  u8g2_for_adafruit_gfx.setCursor(0, 80);
+  u8g2_for_adafruit_gfx.print("Connect to AP: GloryToUkraine");
+  u8g2_for_adafruit_gfx.setCursor(0, 100);
+  u8g2_for_adafruit_gfx.print("Open 192.168.4.1 in your browser");
+  u8g2_for_adafruit_gfx.setCursor(0, 120);
+  u8g2_for_adafruit_gfx.print("You have " + String(CONFIG_PORTAL_TIMEOUT/60) + " minutes to configure");
+
   delay(5000);
 }
 

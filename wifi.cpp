@@ -7,6 +7,7 @@ WiFiManager wm;
 
 const char* host = "russianwarship.rip";
 const String url = "/api/v2/statistics/latest";
+const long CONFIG_PORTAL_TIMEOUT = 300;
 
 String getValueWithIncrease(String param) {
   int increase = (int)currentResponse["data"]["increase"][param];
@@ -76,12 +77,7 @@ void getEnemyLosses() {
   }
 }
 
-void reconnect() {
-  if (!WiFi.isConnected()) {
-    for (int i = 0; i <= 10; i++) {
-      delay(60000);
-      WiFi.reconnect();
-    }
-    ESP.restart();
-  }
+void configPortalTimeoutCallback(){
+  Serial.println("Configuration portal timeout callback started");
+  ESP.restart();
 }
