@@ -19,7 +19,7 @@ void showTime() {
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
   tft.setCursor(10, 95);
   tft.setTextSize(2);
-  tft.print("War day: " + String((int)currentResponse["data"]["day"]));
+  tft.print("War day: " + String(currentDay));
 
   u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
   u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);

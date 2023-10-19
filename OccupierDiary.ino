@@ -31,7 +31,6 @@ void setup() {
     setupDateTime();
     getEnemyLosses();
   }
-
 }
 
 void loop() {
@@ -39,7 +38,7 @@ void loop() {
 
   if (WiFi.isConnected()) {
     time_t now = DateTime.now();
-    if ((now - lastUpdated) > SECONDS_IN_HOUR) {
+    if ((now - lastUpdated) > SECONDS_IN_HOUR / 2) {
       getEnemyLosses();
     }
 
@@ -47,6 +46,5 @@ void loop() {
     displayLosses1();
     showTime();
     displayLosses2();
-  } 
-
+  }
 }

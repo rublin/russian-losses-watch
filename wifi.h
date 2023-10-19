@@ -6,10 +6,13 @@
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClientSecureBearSSL.h>
-#include <Arduino_JSON.h>
+#include <ArduinoJson.h>
 #include "time.h"
 
-extern JSONVar currentResponse;
+extern String currentDate; 
+extern int currentDay;
+extern JsonObject currentStats;
+extern JsonObject currentIncrease;
 extern time_t lastUpdated;
 extern WiFiClientSecure client;
 extern WiFiManager wm;

@@ -1,6 +1,9 @@
 #include "wifi.h"
 
-JSONVar currentResponse;
+String currentDate;
+int currentDay;
+JsonObject currentStats;
+JsonObject currentIncrease;
 time_t lastUpdated;
 WiFiClientSecure client;
 WiFiManager wm;
@@ -10,9 +13,9 @@ const String url = "/api/v2/statistics/latest";
 const long CONFIG_PORTAL_TIMEOUT = 300;
 
 String getValueWithIncrease(String param) {
-  int increase = (int)currentResponse["data"]["increase"][param];
+  int increase = (int)currentIncrease[param];
   // Serial.println(increase);
-  int val = (int)currentResponse["data"]["stats"][param];
+  int val = (int)currentStats[param];
   // Serial.println(val);
   if (increase > 0) {
     return String(val) + "  ( +" + increase + ")";
@@ -21,11 +24,11 @@ String getValueWithIncrease(String param) {
 }
 
 String getValue(String param) {
-  return String((int)currentResponse["data"]["stats"][param]);
+  return String((int)currentStats[param]);
 }
 
 int getIncrease(String param) {
-  int increase = (int)currentResponse["data"]["increase"][param];
+  int increase = (int)currentIncrease[param];
   if (increase > 0) {
     return increase;
   }
@@ -58,11 +61,28 @@ void getEnemyLosses() {
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
           String payload = https.getString();
           Serial.println(payload);
-          currentResponse = JSON.parse(payload);
-          // Serial.println(currentResponse);
-          Serial.println(currentResponse["message"]);
-          Serial.println(currentResponse["data"]["date"]);
-          lastUpdated = DateTime.now();
+
+          DynamicJsonDocument doc(1600);
+          DeserializationError error = deserializeJson(doc, payload);
+
+          if (error) {
+            Serial.print(F("deserializeJson() failed: "));
+            Serial.println(error.f_str());
+            return;
+          } else {
+            JsonObject data = doc["data"];
+
+            const char* date = data["date"];  // "2023-10-17"
+            int day = data["day"];
+
+            currentDate = date;
+            currentDay = day;
+            currentStats = data["stats"];
+            currentIncrease = data["increase"];
+
+            lastUpdated = DateTime.now();
+            Serial.println(currentDay);
+          }
         }
       } else {
         Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
@@ -77,7 +97,7 @@ void getEnemyLosses() {
   }
 }
 
-void configPortalTimeoutCallback(){
+void configPortalTimeoutCallback() {
   Serial.println("Configuration portal timeout callback started");
   ESP.restart();
 }
