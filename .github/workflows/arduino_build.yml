@@ -18,10 +18,6 @@ jobs:
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
           libraries: |
             - name: WiFiManager
-            - name: ESP8266WiFi
-            - name: ESP8266WiFiMulti
-            - name: ESP8266HTTPClient
-            - name: WiFiClientSecureBearSSL
             - name: ArduinoJson
             - name: ESPDateTime
             - name: Adafruit_GFX
