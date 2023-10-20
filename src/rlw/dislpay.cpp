@@ -117,7 +117,7 @@ void displayIco1() {
   tft.fillScreen(ST77XX_WHITE);
   // tft.drawRGBBitmap(0,0,people);
   // tft.drawRGBBitmap(0,80,bbm);
-  tft.drawBitmap(64, 0, tank, 80, 34, ST77XX_BLUE);
+  // tft.drawBitmap(64, 0, tank, 80, 34, ST77XX_BLUE);
   // int h = 80, w = 50, row, col, buffidx = 0;
   // for (row = 0; row < h; row++) {    // For each scanline...
   //   for (col = 0; col < w; col++) {  // For each pixel...

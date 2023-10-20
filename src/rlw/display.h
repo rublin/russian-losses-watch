@@ -6,7 +6,6 @@
 #include <U8g2_for_Adafruit_GFX.h>
 #include <SPI.h>
 #include "wifi.h"
-#include "bitmaps.h"
 
 #include <Fonts/FreeMonoBold12pt7b.h>
 // #include "Fonts/FreeSerif5pt7b.h"
