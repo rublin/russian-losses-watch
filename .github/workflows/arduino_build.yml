@@ -20,7 +20,7 @@ jobs:
             - name: WiFiManager
             - name: ArduinoJson
             - name: ESPDateTime
-            - name: Adafruit_GFX
+            - name: Adafruit GFX Library
             - name: Adafruit_ST7735
             - name: U8g2_for_Adafruit_GFX
             - name: SPI
