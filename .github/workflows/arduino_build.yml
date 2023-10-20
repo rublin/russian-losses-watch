@@ -12,9 +12,9 @@ jobs:
 
       - uses: arduino/compile-sketches@v1
         with:
-          fqbn: "esp32:esp32:tinypico"
+          fqbn: "esp8266:esp8266:nodemcuv2"
           platforms: |
-            - name: esp8266:esp8266:nodemcuv2
+            - name: esp8266:esp8266
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
           libraries: |
             - name: WiFiManager
