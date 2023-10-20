@@ -5,6 +5,7 @@ U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 const int RSSI_MAX = -50;
 const int RSSI_MIN = -100;
+const int PIXEL_SHIFT = 8;
 
 const char units_matrix[15][30] = { "personnel_units", "tanks", "armoured_fighting_vehicles", "artillery_systems", "mlrs", "aa_warfare_systems", "planes", "helicopters", "vehicles_fuel_tanks", "warships_cutters", "cruise_missiles", "uav_systems", "special_military_equip", "atgm_srbm_systems", "submarines" };
 const char unit_names_matrix[15][30] = { "ос.складу", "танків", "ББМ", "арт.систем", "РСЗВ", "ППО", "літаків", "гелікоптерів", "авт.техніки", "кораблів", "крил.ракет", "БпЛА", "спец.техніки", "рак.комплеків", "підв.човнів" };
@@ -16,16 +17,6 @@ void showTime() {
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
   drawCentreString(DateTime.format("%d %b  %a"), 5);
 
-  tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
-  tft.setCursor(10, 95);
-  tft.setTextSize(2);
-  tft.print("War day: " + String(currentDay));
-
-  u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
-  u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
-  u8g2_for_adafruit_gfx.setCursor(5, 125);
-  u8g2_for_adafruit_gfx.print("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + WiFi.localIP().toString());
-
   tft.fillRect(10, 25, 28, 45, 0xC618);
   tft.fillRect(42, 25, 28, 45, 0xC618);
   tft.fillRect(93, 25, 28, 45, 0xC618);
@@ -34,25 +25,53 @@ void showTime() {
   String time = DateTime.format(DateFormatter::TIME_ONLY).substring(0, 5);
   drawTime(time, false);
 
-  for (int i = 0; i < 150; i++) {
+  // 20 seconds
+  for (int i = 0; i < 200; i++) {
 
+    // half a second
     if ((i % 5) == 0) {
       int j = (i / 5) % 2;
       if (j == 0) {
-        // Serial.println(String("i= ") + i + ", j=" + j + ", i/10=" + i / 10 + ", i%10=" + i % 10);
         drawTime(time, true);
       } else {
         drawTime(time, false);
       }
     }
 
+    // 5 seconds
+    if ((i % 50) == 0) {
+      int j = (i / 50) % 2;
+      if (j == 0) {
+        drawWarDay("War day: " + String(currentDay));
+        drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()));
+      } else {
+        drawWarDay(currentDate);
+        drawWiFiParams("Local IP: " + WiFi.localIP().toString());
+      }
+    }
+
     tft.fillRect(0, 75, 160, 18, 0x3800);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_9x15_t_cyrillic);
-    u8g2_for_adafruit_gfx.setCursor(0 - i * 8, 88);
+    u8g2_for_adafruit_gfx.setCursor(0 - i * PIXEL_SHIFT, 88);
     u8g2_for_adafruit_gfx.print(getIncreaseLine());
 
     delay(100);
   }
+}
+
+void drawWarDay(String text) {
+  tft.fillRect(0, 95, 160, 20, ST7735_BLACK);
+  tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
+  drawCentreString(text, 95);
+}
+
+void drawWiFiParams(String text) {
+  tft.fillRect(0, 115, 160, 10, ST7735_BLACK);
+  u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
+  u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
+  int width = u8g2_for_adafruit_gfx.getUTF8Width(text.c_str());
+  u8g2_for_adafruit_gfx.setCursor(calcXcenter(width), 125);
+  u8g2_for_adafruit_gfx.print(text);
 }
 
 void displayWiFiConnected() {
@@ -88,7 +107,7 @@ void displayWiFiConfiguration() {
   u8g2_for_adafruit_gfx.setCursor(0, 100);
   u8g2_for_adafruit_gfx.print("Open 192.168.4.1 in your browser");
   u8g2_for_adafruit_gfx.setCursor(0, 120);
-  u8g2_for_adafruit_gfx.print("You have " + String(CONFIG_PORTAL_TIMEOUT/60) + " minutes to configure");
+  u8g2_for_adafruit_gfx.print("You have " + String(CONFIG_PORTAL_TIMEOUT / 60) + " minutes to configure");
 
   delay(5000);
 }
@@ -152,7 +171,8 @@ void displayLosses1() {
 }
 
 String getIncreaseLine() {
-  String result = "    За минулу добу знищено: ";
+  String buffer = String("     ");
+  String result = String("За минулу ") + currentDay + " добу знищено: ";
 
   for (int i = 0; i < 15; i++) {
     int unit = getIncrease(units_matrix[i]);
@@ -164,7 +184,7 @@ String getIncreaseLine() {
     }
   }
 
-  return result;
+  return buffer + result + buffer + result;
 }
 
 void displayLosses2() {
@@ -247,7 +267,7 @@ void drawCentreString(const String& text, int y, int size) {
   uint16_t w, h;
   tft.setTextSize(size);
   tft.getTextBounds(text, x, y, &x1, &y1, &w, &h);  //calc width of new string
-  tft.setCursor((x - w) / 2, y);
+  tft.setCursor(calcXcenter(w), y);
   tft.print(text);
 }
 
@@ -260,4 +280,8 @@ void drawTime(String time, bool hide) {
   if (hide) {
     tft.fillRect(75, 30, 15, 35, ST77XX_BLACK);
   }
+}
+
+int calcXcenter(int w) {
+  return (160 - w) / 2;
 }

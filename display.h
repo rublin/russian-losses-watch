@@ -28,8 +28,11 @@ void printText(char* text, uint16_t color);
 String dBmtoPercentage(int dBm);
 void drawCentreString(const String& text, int y, int size = 2);
 void drawTime(String time, bool hide);
+void drawWarDay(String text);
+void drawWiFiParams(String text);
 String getIncreaseLine();
 void displayWiFiConnected();
 void displayWiFiConfiguration();
+int calcXcenter(int w);
 
 #endif
