@@ -1,0 +1,32 @@
+name: Build Arduino Sketch
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: "esp32:esp32:tinypico"
+          platforms: |
+            - name: esp8266:esp8266:nodemcuv2
+              source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
+          libraries: |
+            - name: WiFiManager
+            - name: ESP8266WiFi
+            - name: ESP8266WiFiMulti
+            - name: ESP8266HTTPClient
+            - name: WiFiClientSecureBearSSL
+            - name: ArduinoJson
+            - name: ESPDateTime
+            - name: Adafruit_GFX
+            - name: Adafruit_ST7735
+            - name: U8g2_for_Adafruit_GFX
+            - name: SPI
+          sketch-paths: |
+            - sketch
