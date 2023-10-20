@@ -21,8 +21,7 @@ jobs:
             - name: ArduinoJson
             - name: ESPDateTime
             - name: Adafruit GFX Library
-            - name: Adafruit_ST7735
+            - name: Adafruit ST7735 and ST7789 Library
             - name: U8g2_for_Adafruit_GFX
-            - name: SPI
           sketch-paths: |
             - sketch
