@@ -2,6 +2,7 @@
 #include "display.h"
 
 const int SECONDS_IN_HOUR = 3600;
+const char* CONFIG_PORTAL_SSID = "GloryToUkraine";
 
 void setup() {
   Serial.begin(115200);
@@ -16,21 +17,26 @@ void setup() {
   wm.setConfigPortalTimeoutCallback(configPortalTimeoutCallback);
   wm.setShowInfoUpdate(true);
 
-  bool res = wm.autoConnect("GloryToUkraine");
-
-  if (!res) {
-    Serial.println("Failed to connect");
+  if (drd.detectDoubleReset()) {
+    wm.startConfigPortal(CONFIG_PORTAL_SSID);
+    Serial.println("Double Reset Detected");
     displayWiFiConfiguration();
   } else {
-    //if you get here you have connected to the WiFi
-    Serial.println("connected...yeey :)");
-    wm.setConnectTimeout(30);
-    wm.setConnectRetries(5);
+    if (!wm.autoConnect(CONFIG_PORTAL_SSID)) {
+      Serial.println("Failed to connect");
+      displayWiFiConfiguration();
+    } else {
+      //if you get here you have connected to the WiFi
+      Serial.println("connected...yeey :)");
+      wm.setConnectTimeout(30);
+      wm.setConnectRetries(5);
 
-    displayWiFiConnected();
-    setupDateTime();
-    getEnemyLosses();
+      displayWiFiConnected();
+      setupDateTime();
+      getEnemyLosses();
+    }
   }
+  drd.stop();
 }
 
 void loop() {

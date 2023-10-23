@@ -24,6 +24,7 @@ void showTime() {
 
   String time = DateTime.format(DateFormatter::TIME_ONLY).substring(0, 5);
   drawTime(time, false);
+  drawWarDay("War day: " + String(currentDay));
 
   // 20 seconds
   for (int i = 0; i < 200; i++) {
@@ -42,11 +43,9 @@ void showTime() {
     if ((i % 50) == 0) {
       int j = (i / 50) % 2;
       if (j == 0) {
-        drawWarDay("War day: " + String(currentDay));
-        drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()));
+        drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + VERSION);
       } else {
-        drawWarDay(currentDate);
-        drawWiFiParams("Local IP: " + WiFi.localIP().toString());
+        drawWiFiParams("Local IP: " + WiFi.localIP().toString() + " " + VERSION);
       }
     }
 

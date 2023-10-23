@@ -1,6 +1,6 @@
 #include "time.h"
 
-
+DoubleResetDetector drd(DRD_TIMEOUT, DRD_ADDRESS);
 
 void setupDateTime() {
   DateTime.setServer("ua.pool.ntp.org");

@@ -10,6 +10,8 @@
 #include <Fonts/FreeMonoBold12pt7b.h>
 // #include "Fonts/FreeSerif5pt7b.h"
 
+#define VERSION "v0.0.18"
+
 // ST7735 TFT module connections
 #define TFT_RST D4 
 #define TFT_CS D3  
