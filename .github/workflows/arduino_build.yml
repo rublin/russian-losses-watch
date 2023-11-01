@@ -40,6 +40,8 @@ jobs:
             - ${{ runner.temp }}/red
             - --build-properties
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
+            - --build-properties
+            - compiler.cpp.extra_flag=-DVERSION=\"v0.0.${{ github.run_number }}\"
           verbose: true
       - name: Compile green
         uses: arduino/compile-sketches@v1.1.0
@@ -49,21 +51,6 @@ jobs:
           platforms: |
             - name: esp8266:esp8266
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
-          libraries: |
-            - name: WiFiManager
-            - version: 2.0.16-rc.2
-            - name: ArduinoJson
-            - version: 6.21.3
-            - name: ESPDateTime
-            - version: 1.0.4
-            - name: Adafruit GFX Library
-            - version: 1.11.7
-            - name: Adafruit ST7735 and ST7789 Library
-            - version: 1.10.3
-            - name: U8g2_for_Adafruit_GFX
-            - version: 1.8.0
-            - name: DoubleResetDetector
-            - version: 1.0.3
           sketch-paths: |
             - src/rlw
           cli-compile-flags: |
