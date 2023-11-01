@@ -71,7 +71,7 @@ jobs:
             - ${{ runner.temp }}/green
             - --build-properties
             - compiler.cpp.extra_flag=-DINITR=INITR_GREENTAB
-          verbose: true          
+          verbose: true      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -81,42 +81,42 @@ jobs:
           tag_name: v0.0.${{ github.run_number }}
           release_name: Release v0.0.${{ github.run_number }}
       - name: Upload Release red bin
-        id: upload-release-asset 
+        id: upload-release-asset-rb
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ${{ runner.temp }}/red/rlw.ino.bin
-          asset_name: rlw-red-v0.0.${{ github.run_number }}.bin
+          asset_name: rlw-r-v0.0.${{ github.run_number }}.bin
           asset_content_type: application/octet-stream
       - name: Upload Release red elf
-        id: upload-release-asset 
+        id: upload-release-asset-re
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ${{ runner.temp }}/red/rlw.ino.elf
-          asset_name: rlw-red-v0.0.${{ github.run_number }}.elf
+          asset_name: rlw-r-v0.0.${{ github.run_number }}.elf
           asset_content_type: application/octet-stream
       - name: Upload Release green bin
-        id: upload-release-asset 
+        id: upload-release-asset-gb
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ${{ runner.temp }}/green/rlw.ino.bin
-          asset_name: rlw-green-v0.0.${{ github.run_number }}.bin
+          asset_name: rlw-g-v0.0.${{ github.run_number }}.bin
           asset_content_type: application/octet-stream
       - name: Upload Release green elf
-        id: upload-release-asset 
+        id: upload-release-asset-ge
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ${{ runner.temp }}/green/rlw.ino.elf
-          asset_name: rlw-green-v0.0.${{ github.run_number }}.elf
+          asset_name: rlw-g-v0.0.${{ github.run_number }}.elf
           asset_content_type: application/octet-stream          
