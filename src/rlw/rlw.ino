@@ -4,9 +4,11 @@
 const int SECONDS_IN_HOUR = 3600;
 const char* CONFIG_PORTAL_SSID = "GloryToUkraine";
 
+#define INITR INITR_BLACKTAB
+
 void setup() {
   Serial.begin(115200);
-  tft.initR(INITR_GREENTAB);
+  tft.initR(INITR);
   tft.setRotation(1);
   tft.fillScreen(ST77XX_BLACK);
   u8g2_for_adafruit_gfx.begin(tft);

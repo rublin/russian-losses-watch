@@ -10,7 +10,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - uses: arduino/compile-sketches@v1.1.0
+      - name: Compile red
+        uses: arduino/compile-sketches@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           fqbn: "esp8266:esp8266:nodemcuv2"
@@ -30,6 +31,8 @@ jobs:
           cli-compile-flags: |
             - --build-path
             - ${{ runner.temp }}/red
+            - --build-properties
+            - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
           verbose: true
       - name: Create Release
         id: create_release
