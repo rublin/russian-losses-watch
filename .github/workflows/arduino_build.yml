@@ -38,9 +38,9 @@ jobs:
           cli-compile-flags: |
             - --build-path
             - ${{ runner.temp }}/red
-            - --build-properties
+            - --build-property
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
-            - --build-properties
+            - --build-property
             - compiler.cpp.extra_flag=-DVERSION=${{ github.run_number }}
           verbose: true
       - name: Compile green
