@@ -27,6 +27,9 @@ jobs:
             - name: DoubleResetDetector
           sketch-paths: |
             - src/rlw
+          cli-compile-flags: |
+            - --build-path
+            - ${{ runner.temp }}/red
           verbose: true
       - name: Create Release
         id: create_release
@@ -43,6 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: /tmp/arduino/sketches/91AB34324C71406DC23864760AC8861A/rlw.ino.bin
-          asset_name: rlw-v0.0.${{ github.run_number }}.bin
+          asset_path: ${{ runner.temp }}/red/rlw.ino.bin
+          asset_name: rlw--red-v0.0.${{ github.run_number }}.bin
           asset_content_type: application/octet-stream
