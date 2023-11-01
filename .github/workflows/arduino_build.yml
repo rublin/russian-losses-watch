@@ -25,6 +25,12 @@ jobs:
               version: 6.21.3
             - name: ESPDateTime
               version: 1.0.4
+            - name: SD
+              version: 1.2.4
+            - name: Adafruit seesaw Library
+              version: 1.7.3
+            - name: Adafruit BusIO
+              version: 1.14.4
             - name: Adafruit GFX Library
               version: 1.11.7
             - name: Adafruit ST7735 and ST7789 Library
@@ -41,7 +47,7 @@ jobs:
             - --build-property
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
             - --build-property
-            - compiler.cpp.extra_flag=-DVERSION=${{ github.run_number }}
+            - VERSION=${{ github.run_number }}
           verbose: true
       - name: Compile green
         uses: arduino/compile-sketches@v1.1.0

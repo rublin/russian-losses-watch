@@ -43,7 +43,7 @@ void showTime() {
     if ((i % 50) == 0) {
       int j = (i / 50) % 2;
       if (j == 0) {
-        drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + VERSION);
+        drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " v0.0." + VERSION);
       } else {
         drawWiFiParams("Local IP: " + WiFi.localIP().toString() + " v0.0." + VERSION);
       }
