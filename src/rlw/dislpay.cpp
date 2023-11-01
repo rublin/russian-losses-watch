@@ -45,7 +45,7 @@ void showTime() {
       if (j == 0) {
         drawWiFiParams("WiFi: " + WiFi.SSID().substring(0, 10) + " " + dBmtoPercentage(WiFi.RSSI()) + " " + VERSION);
       } else {
-        drawWiFiParams("Local IP: " + WiFi.localIP().toString() + " " + VERSION);
+        drawWiFiParams("Local IP: " + WiFi.localIP().toString() + " v0.0." + VERSION);
       }
     }
 

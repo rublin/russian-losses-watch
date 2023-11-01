@@ -41,7 +41,7 @@ jobs:
             - --build-properties
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
             - --build-properties
-            - compiler.cpp.extra_flag=-DVERSION=\"v0.0.${{ github.run_number }}\"
+            - compiler.cpp.extra_flag=-DVERSION=${{ github.run_number }}
           verbose: true
       - name: Compile green
         uses: arduino/compile-sketches@v1.1.0
