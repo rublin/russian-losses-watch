@@ -20,12 +20,19 @@ jobs:
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
           libraries: |
             - name: WiFiManager
+            - version: 2.0.16-rc.2
             - name: ArduinoJson
+            - version: 6.21.3
             - name: ESPDateTime
+            - version: 1.0.4
             - name: Adafruit GFX Library
+            - version: 1.11.7
             - name: Adafruit ST7735 and ST7789 Library
+            - version: 1.10.3
             - name: U8g2_for_Adafruit_GFX
+            - version: 1.8.0
             - name: DoubleResetDetector
+            - version: 1.0.3
           sketch-paths: |
             - src/rlw
           cli-compile-flags: |
@@ -34,6 +41,37 @@ jobs:
             - --build-properties
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
           verbose: true
+      - name: Compile green
+        uses: arduino/compile-sketches@v1.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          fqbn: "esp8266:esp8266:nodemcuv2"
+          platforms: |
+            - name: esp8266:esp8266
+              source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
+          libraries: |
+            - name: WiFiManager
+            - version: 2.0.16-rc.2
+            - name: ArduinoJson
+            - version: 6.21.3
+            - name: ESPDateTime
+            - version: 1.0.4
+            - name: Adafruit GFX Library
+            - version: 1.11.7
+            - name: Adafruit ST7735 and ST7789 Library
+            - version: 1.10.3
+            - name: U8g2_for_Adafruit_GFX
+            - version: 1.8.0
+            - name: DoubleResetDetector
+            - version: 1.0.3
+          sketch-paths: |
+            - src/rlw
+          cli-compile-flags: |
+            - --build-path
+            - ${{ runner.temp }}/green
+            - --build-properties
+            - compiler.cpp.extra_flag=-DINITR=INITR_GREENTAB
+          verbose: true          
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -42,7 +80,7 @@ jobs:
         with:
           tag_name: v0.0.${{ github.run_number }}
           release_name: Release v0.0.${{ github.run_number }}
-      - name: Upload Release Asset
+      - name: Upload Release red bin
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
@@ -50,5 +88,35 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ${{ runner.temp }}/red/rlw.ino.bin
-          asset_name: rlw--red-v0.0.${{ github.run_number }}.bin
+          asset_name: rlw-red-v0.0.${{ github.run_number }}.bin
           asset_content_type: application/octet-stream
+      - name: Upload Release red elf
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ runner.temp }}/red/rlw.ino.elf
+          asset_name: rlw-red-v0.0.${{ github.run_number }}.elf
+          asset_content_type: application/octet-stream
+      - name: Upload Release green bin
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ runner.temp }}/green/rlw.ino.bin
+          asset_name: rlw-green-v0.0.${{ github.run_number }}.bin
+          asset_content_type: application/octet-stream
+      - name: Upload Release green elf
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ runner.temp }}/green/rlw.ino.elf
+          asset_name: rlw-green-v0.0.${{ github.run_number }}.elf
+          asset_content_type: application/octet-stream          
