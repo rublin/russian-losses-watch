@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Compile red
         uses: arduino/compile-sketches@v1.1.0
@@ -20,19 +20,19 @@ jobs:
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
           libraries: |
             - name: WiFiManager
-            - version: 2.0.16-rc.2
+              version: 2.0.16-rc.2
             - name: ArduinoJson
-            - version: 6.21.3
+              version: 6.21.3
             - name: ESPDateTime
-            - version: 1.0.4
+              version: 1.0.4
             - name: Adafruit GFX Library
-            - version: 1.11.7
+              version: 1.11.7
             - name: Adafruit ST7735 and ST7789 Library
-            - version: 1.10.3
+              version: 1.10.3
             - name: U8g2_for_Adafruit_GFX
-            - version: 1.8.0
+              version: 1.8.0
             - name: DoubleResetDetector
-            - version: 1.0.3
+              version: 1.0.3
           sketch-paths: |
             - src/rlw
           cli-compile-flags: |
