@@ -4,7 +4,9 @@
 const int SECONDS_IN_HOUR = 3600;
 const char* CONFIG_PORTAL_SSID = "GloryToUkraine";
 
+#ifndef INITR
 #define INITR INITR_BLACKTAB
+#endif
 
 void setup() {
   Serial.begin(115200);

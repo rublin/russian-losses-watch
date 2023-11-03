@@ -8,14 +8,15 @@
 #include "wifi.h"
 
 #include <Fonts/FreeMonoBold12pt7b.h>
-// #include "Fonts/FreeSerif5pt7b.h"
 
-#define VERSION 27
+#ifndef VERSION
+#define VERSION 2
+#endif
 
 // ST7735 TFT module connections
-#define TFT_RST D4 
-#define TFT_CS D3  
-#define TFT_DC D2   
+#define TFT_RST D4
+#define TFT_CS D3
+#define TFT_DC D2
 
 extern Adafruit_ST7735 tft;
 extern U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
