@@ -27,14 +27,14 @@ jobs:
               version: 1.0.4
             - name: SD
               version: 1.2.4
+            - name: Adafruit ST7735 and ST7789 Library
+              version: 1.10.3
             - name: Adafruit seesaw Library
               version: 1.7.3
             - name: Adafruit BusIO
               version: 1.14.4
             - name: Adafruit GFX Library
               version: 1.11.7
-            - name: Adafruit ST7735 and ST7789 Library
-              version: 1.10.3
             - name: U8g2_for_Adafruit_GFX
               version: 1.8.0
             - name: DoubleResetDetector
