@@ -47,6 +47,8 @@ jobs:
             - --build-property
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
             - --build-property
+            - compiler.cpp.extra_flag=-DVERSION=${{ github.run_number }}
+            - --build-property
             - VERSION=${{ github.run_number }}
           verbose: true
       - name: Compile green
