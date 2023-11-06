@@ -11,6 +11,7 @@
 #define DRD_ADDRESS 0
 
 extern DoubleResetDetector drd;
+extern char* timeZone;
 
 void setupDateTime();
 

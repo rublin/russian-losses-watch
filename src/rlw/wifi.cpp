@@ -11,6 +11,38 @@ WiFiManager wm;
 const char* host = "russianwarship.rip";
 const String url = "/api/v2/statistics/latest";
 const long CONFIG_PORTAL_TIMEOUT = 300;
+const char* CONFIG_PORTAL_SSID = "GloryToUkraine";
+
+WiFiManagerParameter custom_timeZone("timeZone", "timezone offset (like +2 or -8) or timezone name (like EST5) or POSIX TZ (for Kyiv EET-2EEST,M3.5.0/3,M10.5.0/4)", timeZone, 30);
+
+void configureWiFiManager() {
+  custom_timeZone.setValue(timeZone, 30);
+
+  wm.setConfigPortalBlocking(false);
+  wm.setConfigPortalTimeout(CONFIG_PORTAL_TIMEOUT);
+  wm.setWiFiAutoReconnect(true);
+
+  wm.setConfigPortalTimeoutCallback(configPortalTimeoutCallback);
+  //called when wifi settings have been changed and connection was successful ( or setBreakAfterConfig(true) )
+  wm.setSaveConfigCallback(saveConfigCallback);
+  // //called after AP mode and config portal has started
+  // wm.setAPCallback(std::function<void(WiFiManager*)> func);
+  // //called after webserver has started
+  // wm.setWebServerCallback(std::function<void()> func);
+  // //called when saving either params-in-wifi or params page
+  wm.setSaveParamsCallback(saveConfigCallback);
+  // //called when settings reset have been triggered
+  // wm.setConfigResetCallback(std::function<void()> func);
+  // //called when saving params-in-wifi or params before anything else happens (eg wifi)
+  // wm.setPreSaveConfigCallback(std::function<void()> func);
+  // //called when saving params before anything else happens
+  // wm.setPreSaveParamsCallback(std::function<void()> func);
+  // //called just before doing OTA update
+  // wm.setPreOtaUpdateCallback(std::function<void()> func);
+
+  wm.setShowInfoUpdate(true);
+  wm.addParameter(&custom_timeZone);
+}
 
 String getValueWithIncrease(String param) {
   int increase = (int)currentIncrease[param];
@@ -100,4 +132,58 @@ void getEnemyLosses() {
 void configPortalTimeoutCallback() {
   Serial.println("Configuration portal timeout callback started");
   ESP.restart();
+}
+
+void saveConfigCallback() {
+  Serial.println("save config");
+  loadSavedParameters();
+  DynamicJsonDocument json(1024);
+  json["timeZone"] = timeZone;
+
+  File configFile = SPIFFS.open("/config.json", "w");
+  if (!configFile) {
+    Serial.println("failed to open config file for writing");
+  }
+  serializeJson(json, Serial);
+  serializeJson(json, configFile);
+  configFile.close();
+  ESP.restart();
+}
+
+void readConfigFile() {
+  if (SPIFFS.begin()) {
+    Serial.println("mounted file system");
+    if (SPIFFS.exists("/config.json")) {
+      //file exists, reading and loading
+      Serial.println("reading config file");
+      File configFile = SPIFFS.open("/config.json", "r");
+      if (configFile) {
+        Serial.println("opened config file");
+        size_t size = configFile.size();
+        // Allocate a buffer to store contents of the file.
+        std::unique_ptr<char[]> buf(new char[size]);
+
+        configFile.readBytes(buf.get(), size);
+
+        DynamicJsonDocument json(1024);
+        auto deserializeError = deserializeJson(json, buf.get());
+        serializeJson(json, Serial);
+        if (!deserializeError) {
+          Serial.println("\nparsed json");
+          strcpy(timeZone, json["timeZone"]);
+        } else {
+          Serial.println("failed to load json config");
+        }
+        configFile.close();
+      }
+    }
+  } else {
+    Serial.println("failed to mount FS");
+  }
+}
+
+void loadSavedParameters() {
+  strcpy(timeZone, custom_timeZone.getValue());
+  Serial.println("The values in the file are: ");
+  Serial.println("\ttimeZone: " + String(timeZone));
 }

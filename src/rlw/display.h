@@ -13,14 +13,21 @@
 #define VERSION 2
 #endif
 
+#ifndef INITR
+#define INITR INITR_BLACKTAB
+#endif
+
 // ST7735 TFT module connections
 #define TFT_RST D4
 #define TFT_CS D3
 #define TFT_DC D2
 
+#define DARK_GREY 0x39E7
+
 extern Adafruit_ST7735 tft;
 extern U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
+void configureDisplay();
 void showTime();
 void displayIco1();
 void displayLosses1();

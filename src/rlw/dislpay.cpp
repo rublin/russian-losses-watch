@@ -10,6 +10,13 @@ const int PIXEL_SHIFT = 8;
 const char units_matrix[15][30] = { "personnel_units", "tanks", "armoured_fighting_vehicles", "artillery_systems", "mlrs", "aa_warfare_systems", "planes", "helicopters", "vehicles_fuel_tanks", "warships_cutters", "cruise_missiles", "uav_systems", "special_military_equip", "atgm_srbm_systems", "submarines" };
 const char unit_names_matrix[15][30] = { "ос.складу", "танків", "ББМ", "арт.систем", "РСЗВ", "ППО", "літаків", "гелікоптерів", "авт.техніки", "кораблів", "крил.ракет", "БпЛА", "спец.техніки", "рак.комплеків", "підв.човнів" };
 
+void configureDisplay() {
+  tft.initR(INITR);
+  tft.setRotation(1);
+  tft.fillScreen(ST77XX_BLACK);
+  u8g2_for_adafruit_gfx.begin(tft);
+}
+
 void showTime() {
   DateTimeParts p = DateTime.getParts();
   tft.fillScreen(ST77XX_BLACK);
@@ -49,7 +56,8 @@ void showTime() {
       }
     }
 
-    tft.fillRect(0, 75, 160, 18, 0x3800);
+    tft.fillRect(0, 75, 160, 18, DARK_GREY);
+    u8g2_for_adafruit_gfx.setBackgroundColor(DARK_GREY);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_9x15_t_cyrillic);
     u8g2_for_adafruit_gfx.setCursor(0 - i * PIXEL_SHIFT, 88);
     u8g2_for_adafruit_gfx.print(getIncreaseLine());
@@ -66,6 +74,7 @@ void drawWarDay(String text) {
 
 void drawWiFiParams(String text) {
   tft.fillRect(0, 115, 160, 10, ST7735_BLACK);
+  u8g2_for_adafruit_gfx.setBackgroundColor(ST77XX_BLACK);
   u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
   u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
   int width = u8g2_for_adafruit_gfx.getUTF8Width(text.c_str());
@@ -76,14 +85,14 @@ void drawWiFiParams(String text) {
 void displayWiFiConnected() {
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextSize(2);
-  tft.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
+  tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
 
   tft.setCursor(0, 10);
   tft.print("WiFi status:");
   tft.setCursor(0, 70);
   tft.print("WiFi network:");
 
-  tft.setTextColor(ST77XX_RED, ST77XX_BLACK);
+  tft.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
   drawCentreString("Connected!", 40);
   drawCentreString(WiFi.SSID(), 100);
 
@@ -93,10 +102,10 @@ void displayWiFiConnected() {
 void displayWiFiConfiguration() {
   tft.fillScreen(ST77XX_BLACK);
   tft.setTextSize(2);
-  tft.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
+  tft.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
   tft.setCursor(0, 10);
   tft.print("WiFi status:");
-  tft.setTextColor(0x2015);
+  tft.setTextColor(ST77XX_RED);
   drawCentreString("NOT connected", 35);
 
   u8g2_for_adafruit_gfx.setForegroundColor(ST77XX_WHITE);
@@ -111,34 +120,6 @@ void displayWiFiConfiguration() {
   delay(5000);
 }
 
-void displayIco1() {
-
-  tft.fillScreen(ST77XX_WHITE);
-  // tft.drawRGBBitmap(0,0,people);
-  // tft.drawRGBBitmap(0,80,bbm);
-  // tft.drawBitmap(64, 0, tank, 80, 34, ST77XX_BLUE);
-  // int h = 80, w = 50, row, col, buffidx = 0;
-  // for (row = 0; row < h; row++) {    // For each scanline...
-  //   for (col = 0; col < w; col++) {  // For each pixel...
-  //     //To read from Flash Memory, pgm_read_XXX is required.
-  //     //Since image is stored as uint16_t, pgm_read_word is used as it uses 16bit address
-  //     tft.drawPixel(col, row, pgm_read_word(people + buffidx));
-  //     buffidx++;
-  //   }  // end pixel
-  // }
-
-  // delay(2000);
-  // for (row = 0; row < h; row++) {    // For each scanline...
-  //   for (col = 0; col < w; col++) {  // For each pixel...
-  //     //To read from Flash Memory, pgm_read_XXX is required.
-  //     //Since image is stored as uint16_t, pgm_read_word is used as it uses 16bit address
-  //     tft.drawPixel(col, row, pgm_read_word(tank + buffidx));
-  //     buffidx++;
-  //   }  // end pixel
-  // }
-  delay(5000);
-}
-
 void displayLosses1() {
   tft.fillScreen(ST77XX_BLACK);
 
@@ -148,6 +129,7 @@ void displayLosses1() {
   tft.fillRect(0, 95, 160, 12, 0x10A2);
 
   u8g2_for_adafruit_gfx.setFont(u8g2_font_9x15_t_cyrillic);
+  u8g2_for_adafruit_gfx.setBackgroundColor(ST77XX_BLACK);
 
   u8g2_for_adafruit_gfx.setCursor(0, 15);
   u8g2_for_adafruit_gfx.print("Ос. склад: " + getValue("personnel_units"));
@@ -169,26 +151,11 @@ void displayLosses1() {
   delay(5000);
 }
 
-String getIncreaseLine() {
-  String buffer = String("     ");
-  String result = String("За минулу ") + currentDay + " добу знищено: ";
-
-  for (int i = 0; i < 15; i++) {
-    int unit = getIncrease(units_matrix[i]);
-    if (unit > 0) {
-      if (i > 0) {
-        result = result + ", ";
-      }
-      result = result + unit_names_matrix[i] + " " + unit;
-    }
-  }
-
-  return buffer + result + buffer + result;
-}
-
 void displayLosses2() {
   tft.fillScreen(ST77XX_BLACK);
   u8g2_for_adafruit_gfx.setFont(u8g2_font_9x15_t_cyrillic);
+  u8g2_for_adafruit_gfx.setBackgroundColor(ST77XX_BLACK);
+  
   tft.fillRect(0, 5, 160, 12, 0x10A2);
   tft.fillRect(0, 35, 160, 12, 0x10A2);
   tft.fillRect(0, 65, 160, 12, 0x10A2);
@@ -212,24 +179,21 @@ void displayLosses2() {
   delay(5000);
 }
 
-void displayStartLogo() {
-  tft.fillScreen(ST77XX_BLACK);
-  // u8g2_for_adafruit_gfx.setFont(u8g2_font_5x8_t_cyrillic);
-  // tft.fillRect(0, 0, 160, 64, ST77XX_BLUE);
-  // tft.fillRect(0, 65, 160, 64, ST77XX_YELLOW);
-  // u8g2_for_adafruit_gfx.setCursor(10, 32);
-  // u8g2_for_adafruit_gfx.print("Слава Україні!");
-  // u8g2_for_adafruit_gfx.setCursor(10, 96);
-  // u8g2_for_adafruit_gfx.print("Героям слава!");
-  // delay(2000);
-  // tft.fillScreen(ST77XX_BLACK);
-  // tft.fillRect(0, 0, 160, 64, ST77XX_RED);
-  // // tft.fillRect(0, 65, 160, 64, ST77XX_YELLOW);
-  // u8g2_for_adafruit_gfx.setCursor(10, 32);
-  // u8g2_for_adafruit_gfx.print("Слава нації!");
-  // u8g2_for_adafruit_gfx.setCursor(10, 96);
-  // u8g2_for_adafruit_gfx.print("Смерть ворогам!");
-  delay(2000);
+String getIncreaseLine() {
+  String buffer = String("     ");
+  String result = String("За минулу ") + currentDay + " добу знищено: ";
+
+  for (int i = 0; i < 15; i++) {
+    int unit = getIncrease(units_matrix[i]);
+    if (unit > 0) {
+      if (i > 0) {
+        result = result + ", ";
+      }
+      result = result + unit_names_matrix[i] + " " + unit;
+    }
+  }
+
+  return buffer + result + buffer + result;
 }
 
 /*
