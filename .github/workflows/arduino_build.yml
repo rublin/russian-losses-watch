@@ -10,7 +10,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Compile red
+      - name: Compile
         uses: arduino/compile-sketches@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
             - src/rlw
           cli-compile-flags: |
             - --build-path
-            - ${{ runner.temp }}/red
+            - ${{ runner.temp }}/build
             - --build-property
             - compiler.cpp.extra_flag=-DINITR=INITR_BLACKTAB
             - --build-property
@@ -51,22 +51,6 @@ jobs:
             - --build-property
             - VERSION=${{ github.run_number }}
           verbose: true
-      - name: Compile green
-        uses: arduino/compile-sketches@v1.1.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          fqbn: "esp8266:esp8266:nodemcuv2"
-          platforms: |
-            - name: esp8266:esp8266
-              source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
-          sketch-paths: |
-            - src/rlw
-          cli-compile-flags: |
-            - --build-path
-            - ${{ runner.temp }}/green
-            - --build-properties
-            - compiler.cpp.extra_flag=-DINITR=INITR_GREENTAB
-          verbose: true      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -75,43 +59,24 @@ jobs:
         with:
           tag_name: v0.0.${{ github.run_number }}
           release_name: Release v0.0.${{ github.run_number }}
-      - name: Upload Release red bin
-        id: upload-release-asset-rb
+      - name: Upload Release bin
+        id: upload-release-asset-bin
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ${{ runner.temp }}/red/rlw.ino.bin
-          asset_name: rlw-r-v0.0.${{ github.run_number }}.bin
+          asset_path: ${{ runner.temp }}/build/rlw.ino.bin
+          asset_name: rlw-v0.0.${{ github.run_number }}.bin
           asset_content_type: application/octet-stream
-      - name: Upload Release red elf
-        id: upload-release-asset-re
+      - name: Upload Release elf
+        id: upload-release-asset-elf
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ${{ runner.temp }}/red/rlw.ino.elf
-          asset_name: rlw-r-v0.0.${{ github.run_number }}.elf
+          asset_path: ${{ runner.temp }}/build/rlw.ino.elf
+          asset_name: rlw-v0.0.${{ github.run_number }}.elf
           asset_content_type: application/octet-stream
-      - name: Upload Release green bin
-        id: upload-release-asset-gb
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ${{ runner.temp }}/green/rlw.ino.bin
-          asset_name: rlw-g-v0.0.${{ github.run_number }}.bin
-          asset_content_type: application/octet-stream
-      - name: Upload Release green elf
-        id: upload-release-asset-ge
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ${{ runner.temp }}/green/rlw.ino.elf
-          asset_name: rlw-g-v0.0.${{ github.run_number }}.elf
-          asset_content_type: application/octet-stream          
+          
