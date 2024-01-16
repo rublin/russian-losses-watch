@@ -147,7 +147,14 @@ void saveConfigCallback() {
   serializeJson(json, Serial);
   serializeJson(json, configFile);
   configFile.close();
-  ESP.restart();
+  Serial.println("Config saved");
+
+  if (wm.getWiFiIsSaved()) {
+    Serial.println("WiFi saved");
+    wm.reboot();
+  } else {
+    Serial.println("WiFi not saved");
+  }
 }
 
 void readConfigFile() {

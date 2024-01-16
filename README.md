@@ -8,6 +8,7 @@ The watch displays the ʳussian losses in the current war in Ukraine. It uses th
 
 ## Get started
 
+0. Buy components and upload the firmware for the first time. Read [this document](https://github.com/rublin/russian-losses-watch/blob/main/BUY_IT_YOURSELF.md).
 1. Turn on the watch (using micro usb or type-c cable)
 2. Wait for the message **WiFi status: NOT connected**. It's an initial config mode.
 3. Use your smartphone to connect to the access point GloryToUkraine
